@@ -4,6 +4,7 @@ const webpack = require('webpack');
 
 // modulo para añador toda ña configuración de webpack a index.html
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 // se exporta el modulo de configuración
 module.exports = {
@@ -23,9 +24,20 @@ module.exports = {
         use: 'babel-loader',
         exclude: /node_modules/,
       },
+      {
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: 'css-loader',
+        }),
+      },
+      {
+        test: /\.html$/,
+        use: 'raw-loader',
+      },
     ],
   },
-  plugins: [new HtmlWebpackPlugin({ template: './src/public/index.html' })],
+  plugins: [new HtmlWebpackPlugin({ template: './src/public/index.html' }), new ExtractTextPlugin('styles.css')],
 
   // para configurar la carpeta base del proyecto
   devServer: {
